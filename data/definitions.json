@@ -1,0 +1,105 @@
+{
+  "note": "各カテゴリの平均(mean)・標準偏差(sd)は公表統計に基づく概算値。厳密な原典値ではなく教育・娯楽目的の近似。source は代表的な出典の種類を示す。",
+  "seed": 20260724,
+  "categories": [
+    {
+      "id": "height_male",
+      "label": "身長",
+      "group": "成人男性",
+      "unit": "cm",
+      "mean": 171.5,
+      "sd": 5.8,
+      "higherIsBetter": true,
+      "n": 3000,
+      "source": "国民健康・栄養調査(概算)"
+    },
+    {
+      "id": "height_female",
+      "label": "身長",
+      "group": "成人女性",
+      "unit": "cm",
+      "mean": 158.5,
+      "sd": 5.4,
+      "higherIsBetter": true,
+      "n": 3000,
+      "source": "国民健康・栄養調査(概算)"
+    },
+    {
+      "id": "weight_male",
+      "label": "体重",
+      "group": "成人男性",
+      "unit": "kg",
+      "mean": 68.0,
+      "sd": 10.0,
+      "higherIsBetter": false,
+      "n": 3000,
+      "source": "国民健康・栄養調査(概算)"
+    },
+    {
+      "id": "weight_female",
+      "label": "体重",
+      "group": "成人女性",
+      "unit": "kg",
+      "mean": 53.0,
+      "sd": 8.0,
+      "higherIsBetter": false,
+      "n": 3000,
+      "source": "国民健康・栄養調査(概算)"
+    },
+    {
+      "id": "iq_all",
+      "label": "IQ",
+      "group": "全体",
+      "unit": "",
+      "mean": 100.0,
+      "sd": 15.0,
+      "higherIsBetter": true,
+      "n": 5000,
+      "source": "IQ定義(平均100/SD15)"
+    },
+    {
+      "id": "grip_male",
+      "label": "握力",
+      "group": "成人男性",
+      "unit": "kg",
+      "mean": 47.0,
+      "sd": 7.0,
+      "higherIsBetter": true,
+      "n": 3000,
+      "source": "新体力テスト(概算)"
+    },
+    {
+      "id": "grip_female",
+      "label": "握力",
+      "group": "成人女性",
+      "unit": "kg",
+      "mean": 28.0,
+      "sd": 5.0,
+      "higherIsBetter": true,
+      "n": 3000,
+      "source": "新体力テスト(概算)"
+    },
+    {
+      "id": "sprint50_male",
+      "label": "50m走",
+      "group": "成人男性",
+      "unit": "秒",
+      "mean": 7.5,
+      "sd": 0.7,
+      "higherIsBetter": false,
+      "n": 3000,
+      "source": "新体力テスト(概算)"
+    },
+    {
+      "id": "sprint50_female",
+      "label": "50m走",
+      "group": "成人女性",
+      "unit": "秒",
+      "mean": 9.0,
+      "sd": 0.8,
+      "higherIsBetter": false,
+      "n": 3000,
+      "source": "新体力テスト(概算)"
+    }
+  ]
+}

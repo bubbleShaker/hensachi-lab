@@ -1,0 +1,22 @@
+{
+  "name": "hensachi-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "正規分布データから偏差値・パーセンタイルを求めるブラウザ完結の統計サイト (DuckDB-WASM)",
+  "scripts": {
+    "gen:data": "tsx scripts/generate-data.ts",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@duckdb/duckdb-wasm": "^1.29.0",
+    "chart.js": "^4.4.7"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.5"
+  }
+}
