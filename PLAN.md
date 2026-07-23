@@ -35,10 +35,15 @@
 ## ステップ（小さく刻む）
 
 - [x] Step0: 土台・PLAN・GitHub Issue
-- [ ] Step1: データ定義 + 生成スクリプト → CSV 出力
-- [ ] Step2: Vite + DuckDB-WASM で CSV を読み集計、偏差値を計算（UI 最小）
-- [ ] Step3: Chart.js で正規分布カーブ可視化 + パーセンタイル等の面白データ
-- [ ] Step4: reviewer レビュー → PR → マージ
+- [x] Step1: データ定義 + 生成スクリプト → CSV 出力
+- [x] Step2: Vite + DuckDB-WASM で CSV を読み集計、偏差値を計算（UI 最小）
+- [x] Step3: Chart.js で正規分布カーブ可視化 + パーセンタイル等の面白データ
+- [x] Step4: reviewer レビュー → PR #3 マージ済み
+
+## 次の候補（未着手）
+- ブラウザでの実行時目視確認（DuckDB wasm ロード / Chart 描画）
+- カテゴリ追加（年収=対数正規、血圧、体力テスト他種目）
+- 複数値の一括入力・共有URL・GitHub Pages デプロイ
 
 ## 開発サイクル
 
