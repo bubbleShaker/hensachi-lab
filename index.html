@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+      CSP: DuckDB-WASM のエンジン(wasm/worker)は jsDelivr から取得し、Worker は blob URL で起動する。
+      それらを許可しつつ他オリジンを遮断する。WebAssembly 実行に wasm-unsafe-eval が必要。
+    -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'wasm-unsafe-eval' https://cdn.jsdelivr.net blob:; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:;"
+    />
     <title>偏差値ラボ 🥜 hensachi-lab</title>
   </head>
   <body>

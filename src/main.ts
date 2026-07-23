@@ -4,7 +4,7 @@
 import "./style.css";
 import { Chart } from "chart.js/auto";
 import defsRaw from "../data/definitions.json";
-import { computeStats, normalCdf, type StatResult } from "./stats";
+import { computeStats, type StatResult } from "./stats";
 
 interface Category {
   id: string;
@@ -28,17 +28,19 @@ const statusEl = $<HTMLParagraphElement>("status");
 const resultsEl = $<HTMLElement>("results");
 let chart: Chart | null = null;
 
-// カテゴリのプルダウンを定義から生成。
-for (const [i, c] of defs.categories.entries()) {
+// カテゴリのプルダウンを定義から生成。value は id を直接使い、DBクエリと結合させる。
+for (const c of defs.categories) {
   const opt = document.createElement("option");
-  opt.value = String(i);
+  opt.value = c.id;
   opt.textContent = `${c.label}（${c.group}）`;
   categorySel.appendChild(opt);
 }
 $("disclaimer").textContent = defs.note;
 
 function currentCategory(): Category {
-  return defs.categories[Number(categorySel.value)];
+  const c = defs.categories.find((c) => c.id === categorySel.value);
+  if (!c) throw new Error("カテゴリ未選択なのだ。");
+  return c;
 }
 function syncUnit() {
   unitSpan.textContent = currentCategory().unit;
@@ -54,9 +56,16 @@ async function run() {
     return;
   }
   statusEl.textContent = "計算中なのだ…";
-  const s = await computeStats(cat.id, x, cat.higherIsBetter);
-  statusEl.textContent = "";
-  render(cat, x, s);
+  calcBtn.disabled = true; // 計算中の連打で多重クエリが走るのを防ぐ。
+  try {
+    const s = await computeStats(cat.id, x, cat.higherIsBetter);
+    statusEl.textContent = "";
+    render(cat, x, s);
+  } catch (err) {
+    statusEl.textContent = `計算に失敗したのだ: ${(err as Error).message}`;
+  } finally {
+    calcBtn.disabled = false;
+  }
 }
 
 function render(cat: Category, x: number, s: StatResult) {
@@ -108,7 +117,6 @@ function drawChart(cat: Category, x: number, s: StatResult) {
           backgroundColor: "rgba(76,175,80,0.15)",
           fill: true,
           pointRadius: 0,
-          tension: 0.3,
         },
         {
           label: "あなた",
@@ -129,10 +137,9 @@ function drawChart(cat: Category, x: number, s: StatResult) {
         tooltip: { enabled: false },
         title: {
           display: true,
-          text: `${cat.label}（${cat.group}）の分布とあなたの位置（上位 ${(
-            (1 - normalCdf(cat.higherIsBetter ? s.z : -s.z)) *
-            100
-          ).toFixed(1)}%）`,
+          text: `${cat.label}（${cat.group}）の分布とあなたの位置（上位 ${s.topPercent.toFixed(
+            1,
+          )}%）`,
         },
       },
       scales: {

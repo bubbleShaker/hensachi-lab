@@ -50,14 +50,20 @@ const defs: Definitions = JSON.parse(
 
 const rng = mulberry32(defs.seed);
 const lines: string[] = ["category_id,value"];
+let clipped = 0;
 
 for (const cat of defs.categories) {
   for (let i = 0; i < cat.n; i++) {
-    const x = cat.mean + cat.sd * normal(rng);
+    const raw = cat.mean + cat.sd * normal(rng);
     // 小数第2位まで。物理量として非現実的な負値は 0 でクリップ。
-    const value = Math.max(0, Math.round(x * 100) / 100);
+    // クリップは分布を歪める（DuckDB再集計の mean/sd が公表値から僅かにずれる要因）ため件数を記録。
+    if (raw < 0) clipped++;
+    const value = Math.max(0, Math.round(raw * 100) / 100);
     lines.push(`${cat.id},${value}`);
   }
+}
+if (clipped > 0) {
+  console.warn(`⚠️ 負値クリップが ${clipped} 件発生（分布が僅かに歪むのだ）。`);
 }
 
 const outPath = resolve(root, "public/data/samples.csv");

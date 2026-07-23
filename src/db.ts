@@ -36,9 +36,11 @@ async function createConnection(): Promise<duckdb.AsyncDuckDBConnection> {
     return r.text();
   });
   await db.registerFileText("samples.csv", csv);
+  // スキーマを明示して型推論に依存しない（value は必ず DOUBLE として集計）。
   await conn.query(
     `CREATE TABLE samples AS
-       SELECT * FROM read_csv_auto('samples.csv', header = true);`,
+       SELECT * FROM read_csv('samples.csv', header = true,
+         columns = {'category_id': 'VARCHAR', 'value': 'DOUBLE'});`,
   );
 
   return conn;

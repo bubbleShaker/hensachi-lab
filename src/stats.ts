@@ -55,26 +55,32 @@ export async function computeStats(
         avg(value)          AS mean,
         stddev_samp(value)  AS sd,
         count(*)            AS n,
-        count(*) FILTER (WHERE value <= ?) AS le,
-        count(*) FILTER (WHERE value >= ?) AS ge
+        count(*) FILTER (WHERE value > ?) AS gt,
+        count(*) FILTER (WHERE value < ?) AS lt,
+        count(*) FILTER (WHERE value = ?) AS eq
       FROM samples WHERE category_id = ?;`,
   );
-  const res = await stmt.query(x, x, category);
+  const res = await stmt.query(x, x, x, category);
   const row = res.get(0);
   if (!row) throw new Error(`カテゴリが見つからない: ${category}`);
 
   const mean = Number(row.mean);
   const sd = Number(row.sd);
   const n = Number(row.n);
-  const le = Number(row.le); // x 以下の件数
-  const ge = Number(row.ge); // x 以上の件数
+  const gt = Number(row.gt); // x より大きい件数
+  const lt = Number(row.lt); // x より小さい件数
+  const eq = Number(row.eq); // x と同値の件数
+  if (!(sd > 0) || n < 2) {
+    throw new Error("標準偏差が計算できないのだ（サンプルが不足）。");
+  }
 
   const z = (x - mean) / sd;
   const hensachi = 50 + 10 * z;
 
-  // 「良い方」の件数割合。higherIsBetter なら大きいほど良い(ge)、逆なら小さいほど良い(le)。
-  const betterOrEqual = higherIsBetter ? ge : le;
-  const topPercent = (betterOrEqual / n) * 100;
+  // 上位%は「厳密に良い側の件数 + 同値の半分」を母数で割る中間順位法。
+  // 丸めで同値が多発しても偏らず、le+ge が n を超える問題を避ける。
+  const strictlyBetter = higherIsBetter ? gt : lt;
+  const topPercent = ((strictlyBetter + eq / 2) / n) * 100;
   const rankIn100 = Math.min(100, Math.max(1, Math.round(topPercent)));
 
   return { mean, sd, n, z, hensachi, cdf: normalCdf(z), topPercent, rankIn100 };
