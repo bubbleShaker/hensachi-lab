@@ -6,11 +6,9 @@ on:
     branches: [master]
   workflow_dispatch: # 手動実行も可能にする
 
-# Pages へのデプロイに必要な権限（OIDC トークンで安全に公開する）。
+# 既定は読み取りのみ。書き込み権限は必要な deploy ジョブにだけ個別付与する（最小権限）。
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # 同時実行を1つに制限（古いデプロイが新しいものを上書きしないように）。
 concurrency:
@@ -20,6 +18,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,6 +36,9 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write # Pages への公開
+      id-token: write # OIDC トークン発行
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
