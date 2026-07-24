@@ -39,11 +39,13 @@
 - [x] Step2: Vite + DuckDB-WASM で CSV を読み集計、偏差値を計算（UI 最小）
 - [x] Step3: Chart.js で正規分布カーブ可視化 + パーセンタイル等の面白データ
 - [x] Step4: reviewer レビュー → PR #3 マージ済み
+- [x] Step5: ブラウザ実機確認（Playwright, ローカル/サブパス/本番すべて成功）
+- [x] Step6: GitHub Pages 自動デプロイ (#5, PR #6) → https://bubbleshaker.github.io/hensachi-lab/
 
 ## 次の候補（未着手）
-- ブラウザでの実行時目視確認（DuckDB wasm ロード / Chart 描画）
 - カテゴリ追加（年収=対数正規、血圧、体力テスト他種目）
-- 複数値の一括入力・共有URL・GitHub Pages デプロイ
+- 複数値の一括入力・共有URL（値をクエリパラメータ化）
+- Node20非推奨のCI actions更新
 
 ## 開発サイクル
 
